@@ -8,20 +8,20 @@ const myFunctionCopyAndNotify = () => {
 		// ファイル名を作成
 		const fileName = createFileName()
 		// スプレッドシートのコピーを作成
-		copy()
+		copySheet()
 		// PDFBlobを作成
 		const pdfBlob = createPdfBlob(ss, fileName)
 		// googleDriveに保存
-		createFile(pdfBlob)
+		const file = createFile(pdfBlob)
 		// ファイルのURLを取得
-		const fileUrl = getFileUrl(pdfBlob)
+		const fileUrl = getFileUrl(file)
 		// LINEへファイルのURLを通知
 		sendLine(fileUrl)
 		// 自分のメールへ通知
 		sendEmail(pdfBlob, fileUrl)
 	}
 }
-const myFunctionOnlyNotifyOfEmail = () => {
+const myFunctionOnlyNotifyToEmail = () => {
 	// ファイル名を作成
 	const fileName = createFileName()
 	// PDFBlobを作成
@@ -35,10 +35,10 @@ const isCheckDate = () => {
 	// スクリプトトリガ実行日
 	const today = new Date().getDate()
 	// もし１ならtrue
-	return today === 15
+	return today === 1
 }
 
-const copy = () => {
+const copySheet = () => {
 	try {
 		// 新シート生成
 
@@ -61,11 +61,13 @@ const copy = () => {
 		const newSheet = ss.getSheetByName(fileName)
 		// 旧シートからデータを転記
 		newSheet.getRange(1, 1, lr, lc).setValues(current.getRange(1, 1, lr, lc).getValues())
-		// おそらくフォーマットが狂うので整形（ここでは２列目以降に出勤時間、退勤時間が並んでいるものと想定）
-		newSheet.getRange(2, 2, lr - 1, lc - 1).setNumberFormat('hh:mm')
+		// おそらくフォーマットが狂うので整形（ここでは4列目以降に残業開始時間、終了時間が並んでいるものと想定）
+		newSheet.getRange(2, 4, lr - 1, lc - 1).setNumberFormat('hh:mm')
 
 		// 旧シート初期化
-		// current.deleteRows(2, lr - 1) // あえて.getRange().clear()は使わない
+		if (new Date().getDate() === 1) {
+			current.deleteRows(2, lr - 1) // あえて.getRange().clear()は使わない
+		}
 
 		// トリガーが失敗したら知らせる
 	} catch (e) {

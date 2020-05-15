@@ -11,11 +11,16 @@ const createFile = (blob) => {
 	// Folderオブジェクト.createFile(Blobオブジェクト)
 	const FOLDER_ID = PropertiesService.getScriptProperties().getProperty('FOLDER_ID') //フォルダIDを指定
 	const folder = DriveApp.getFolderById(FOLDER_ID) //フォルダIDを指定
-	folder.createFile(blob)
+	const file = folder.createFile(blob)
+	return file
 }
 
 // googleDriveに保存したファイルのURLを取得する
-const getFileUrl = (blob) => blob.getUrl()
+const getFileUrl = (file) => {
+	// Fileオブジェクト.getUrl()
+	const fileUrl = file.getUrl()
+	return fileUrl
+}
 
 // 自分宛てにPDFBlobをメールで送信する
 const sendEmail = (pdfBlob, url) => {
