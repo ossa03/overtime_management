@@ -3,6 +3,8 @@ const createPdfBlob = (spreadSheet, fileName) => {
 	//スプレッドシート全部をPDFとして取得されてしまう
 	//! スプレッドシートを1シートずつPDF化する方法はないのか？
 	const pdfBlob = spreadSheet.getAs('application/pdf').setName(`${fileName}.pdf`)
+	// const pdfBlob = spreadSheet.getBlob().getAs('image/jpeg').setName(`${fileName}.jpeg`)
+	// -->Exception: application/pdf から image/jpeg への変換はサポートされていません。
 	return pdfBlob
 }
 
